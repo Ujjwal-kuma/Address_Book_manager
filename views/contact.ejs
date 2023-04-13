@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0%;
+            margin: 0%;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+        }
+
+        body {
+            background: rgb(106, 106, 105);
+            background: radial-gradient(circle, rgba(106, 106, 105, 1) 0%, rgba(0, 0, 0, 1) 100%);
+        }
+
+        #add-contact,
+        .contact-list {
+            color: white;
+            display: flex;
+            flex-direction: column;
+            border: 0px solid rgb(116, 110, 110, 0.4);
+            border-radius: 25px;
+            width: 40%;
+            margin: auto;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            min-height: 40px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+            background: rgb(61, 61, 59);
+            background: radial-gradient(circle, rgba(61, 61, 59, 1) 0%, rgba(0, 0, 0, 1) 100%);
+        }
+
+        #add-contact input,
+        label {
+            margin: auto;
+            width: 90%;
+            height: 30px;
+        }
+
+        #add-contact input {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-bottom: 1px solid white;
+            background: transparent;
+            outline: none;
+            color: white;
+        }
+
+        #add-contact input:focus {
+            font-size: 16px;
+            color: white;
+        }
+
+        #add-contact button {
+            margin: auto;
+            width: 130px;
+            height: 30px;
+            transition: 0.5s;
+            border-radius: 5px;
+        }
+
+        #add-contact button:hover {
+            background-color: black;
+            color: white;
+        }
+
+        #srch {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            margin: auto;
+            justify-content: center;
+        }
+
+        #srch input {
+            width: 80%;
+            height: 30px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            width: 85%;
+            margin: auto;
+            margin-top: 20px;
+            height: 72px;
+            padding: 10px;
+            border: 1px solid rgb(214, 214, 214);
+            border-radius: 10px;
+            align-items: center;
+            /* text-align: center; */
+        }
+
+        .contact-item .item {
+            margin-left: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+        }
+
+        .contact-item .btn {
+            display: none;
+            /* display: flex; */
+            flex-direction: column;
+            position: absolute;
+            right: 10px;
+        }
+
+        .contact-item:hover {
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        .contact-item:hover .btn {
+            display: flex;
+        }
+
+        .contact-item .btn a {
+            text-decoration: none;
+            text-align: center;
+            color: black;
+            border: 1px solid black;
+            padding: 2px;
+            margin-bottom: 2px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .contact-item .btn a:hover {
+            background-color: rgb(7, 7, 7);
+            color: white;
+        }
+
+        .img {
+            width: 40px;
+            margin-right: 20px;
+        }
+
+        .img img {
+            border-radius: 50%;
+            height: 60px;
+            width: 60px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            background-image: url('./uploads/contact.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* border: 1px solid #ccc; */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* padding: 6px 12px; */
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
+        }
+
+        .custom-file-upload img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/_header') %>
+        <form id="add-contact" action="/add" method="post" enctype="multipart/form-data">
+            <label class="custom-file-upload">
+                <img id="img-prev" src="" alt="">
+                <input id="add-image" type="file" name="image" />
+            </label>
+            <label for="name">Name</label>
+            <input type="text" placeholder="Name" id="name" name="name">
+            <label for="phone">Mobile Number</label>
+            <input type="text" required minlength="10" maxlength="10" pattern="[0-9]{1,10}" placeholder="Mobile Number"
+                name="phone" id="phone">
+            <button>ADD CONTACT</button>
+        </form>
+        <section class="contact-list">
+            <form action="/" id="srch" method="get">
+                <input type="text" placeholder="Search" name="search" onkeyup="serachDetails()" id="search">
+                <button>&#128269</button>
+            </form>
+            <% data.forEach((element)=> { %>
+                <div class="contact-item">
+                    <div class="img">
+                        <img src="<%- element.image %>" alt="">
+                    </div>
+                    <div class="item">
+                        <h4><%- element.name %></h2>
+                                <p><%- element.phone %></p>
+                    </div>
+                    <div class="btn">
+                        <a href="/delete/<%-element.id %>">Delete</a>
+                        <a id="edit" href="/edit/<%-element.id %>">Edit</a>
+                    </div>
+                </div>
+                <% }) %>
+        </section>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelector('#edit').addEventListener('click', function (e) {
+        e.defaultPrevented();
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your work has been saved',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    })
+    function show() {
+        // Swal.fire('The Internet?', 'That thing is still around?', 'question')
+        // alert("the Internet");
+
+    }
+    let srch = document.getElementById('srch');
+    let serachDetails = () => {
+        console.log("calling");
+        let search = document.getElementById('search');
+        let filter = search.value.toUpperCase();
+        let contactItem = document.querySelectorAll('.contact-item');
+        for (let i = 0; i < contactItem.length; i++) {
+            let h = contactItem[i].getElementsByTagName('h4')[0].textContent;
+            let p = contactItem[i].getElementsByTagName('p')[0].textContent;
+            if (h.toUpperCase().indexOf(filter) > -1 || p.toUpperCase().indexOf(filter) > -1) {
+                contactItem[i].style.display = "";
+            }
+            else {
+                contactItem[i].style.display = "none";
+
+            }
+
+        }
+    }
+    // To preview image before uplaod
+    let addImage = document.querySelector('#add-image');
+    let imgprev = document.querySelector('#img-prev');
+    addImage.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            imgprev.style.display = 'block';
+            imgprev.src = reader.result;
+        };
+    })
+
+</script>
+
+</html>

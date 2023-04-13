@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0%;
+            margin: 0%;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+        }
+
+        body {
+            background: rgb(106,106,105);
+background: radial-gradient(circle, rgba(106,106,105,1) 0%, rgba(0,0,0,1) 100%);
+            
+        }
+
+        #update-det {
+            color: white;
+            display: flex;
+            flex-direction: column;
+            border: 0px solid rgb(116, 110, 110, 1);
+            border-radius: 25px;
+            width: 40%;
+            margin: auto;
+            margin-top: 10px;
+            padding: 20px 0;
+            min-height: 40px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+            background: rgb(61,61,59);
+background: radial-gradient(circle, rgba(61,61,59,1) 0%, rgba(0,0,0,1) 100%);
+        }
+
+        #update-det input,
+        label {
+            margin: auto;
+            width: 90%;
+            height: 30px;
+        }
+
+        #update-det input {
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        input::placeholder {
+            padding: 10px;
+        }
+
+        #update-det button {
+            margin: auto;
+            width: 130px;
+            height: 30px;
+            transition: 0.5s;
+            border-radius: 5px;
+        }
+
+        #update-det button:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .img {
+            width: 90%;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            height: 65px;
+            gap: 2rem;
+        }
+
+        .img img {
+            margin-left: 20px;
+            border-radius: 50%;
+            height: 60px;
+            width: 60px;
+        }
+
+        .img input[type='file'] {
+            display: none;
+        }
+
+        .img label {
+            box-sizing: border-box;
+            border: 1px solid black;
+            padding: 5px 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            margin-left: 0px;
+            /* background-color: red; */
+            cursor: pointer;
+            width: 144px;
+            height: 40px;
+            transition: 0.4s;
+        }
+
+        .img label:hover {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/_header') %>
+        <section class="update">
+            <form id="update-det" action="/update/<%- update.id %>" method="post" enctype="multipart/form-data">
+                <label class="img">
+                    <img id="img-preview" src="<%- update.image %>" alt="kundan">
+                    <label>Change Picture<input id="ad-image" type="file" name="image"></label>
+                </label>
+                <label for="name">Name</label>
+                <input type="text" placeholder="Name" name="name" value="<%- update.name %>" id="name">
+                <label for="phone">Mobile Number</label>
+                <input type="text" required minlength="10" maxlength="10" pattern="[0-9]{1,10}"
+                    placeholder="Mobile Number" name="phone" value="<%-update.phone %>" id="phone">
+                <button>Update</button>
+            </form>
+        </section>
+</body>
+<script>
+    let addImage = document.querySelector('#ad-image');
+    let imgprev = document.querySelector('#img-preview');
+    addImage.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            imgprev.src = reader.result;
+        };
+    })
+</script>
+
+</html>
